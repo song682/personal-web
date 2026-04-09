@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import "./typography.css";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* 原网站的配色方案 */
+:root,
+html[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #333333;
+  --accent: #3b82f6;
+  --muted: #f8fafc;
+  --border: #e2e8f0;
+  --card-bg: #f8fafc;
+}
+
+html[data-theme="dark"] {
+  --background: #1a1a2e;
+  --foreground: #e0e0e0;
+  --accent: #60a5fa;
+  --muted: #252a41;
+  --border: #374151;
+  --card-bg: #252a41;
+}
+
+@theme inline {
+  --font-app: 'Noto Sans', 'Noto Sans SC', system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card-bg: var(--card-bg);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    scrollbar-width: auto;
+    scrollbar-color: var(--color-muted) transparent;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  html {
+    @apply overflow-y-scroll scroll-smooth;
+  }
+  body {
+    @apply flex min-h-svh flex-col bg-background font-app text-foreground;
+    font-family: 'Noto Sans', 'Noto Sans SC', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  a,
+  button {
+    @apply outline-offset-1 outline-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@utility max-w-app {
+  @apply max-w-[800px];
+}
+
+@utility app-layout {
+  @apply mx-auto w-full max-w-app px-4;
+}
+
+/* 原网站的导航激活样式 */
+.active-nav {
+  background-color: var(--accent) !important;
+  color: white !important;
+  border-radius: 6px;
+}
+
+/* 卡片动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-in-delay-1 {
+  animation: fadeIn 0.5s ease-out 0.1s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 0.5s ease-out 0.2s both;
+}
+
+/* Source: https://piccalil.li/blog/a-more-modern-css-reset/ */
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+  scroll-margin-block: 1rem;
+}

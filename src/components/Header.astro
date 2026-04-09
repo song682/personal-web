@@ -1,0 +1,120 @@
+---
+import IconX from "@/assets/icons/IconX.svg";
+import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconSearch from "@/assets/icons/IconSearch.svg";
+import IconArchive from "@/assets/icons/IconArchive.svg";
+import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
+import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
+import LinkButton from "./LinkButton.astro";
+import { SITE } from "@/config";
+
+const { pathname } = Astro.url;
+
+// Remove trailing slash from current pathname if exists
+const currentPath =
+  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+
+const isActive = (path: string) => {
+  const currentPathArray = currentPath.split("/").filter(p => p.trim());
+  const pathArray = path.split("/").filter(p => p.trim());
+
+  return currentPath === path || currentPathArray[0] === pathArray[0];
+};
+---
+
+<header class="app-layout">
+  <div class="flex flex-col sm:flex-row items-center justify-between py-5 mb-10 border-b border-border gap-4">
+    <!-- 网站标题 -->
+    <a href="/" class="text-center sm:text-left">
+      <h1 class="text-3xl sm:text-4xl font-bold text-foreground flex items-center gap-2">
+        <span>🐾</span>
+        <span>Little kitty's lil home</span>
+        <span>🐾</span>
+      </h1>
+    </a>
+    
+    <!-- 导航和主题切换 -->
+    <div class="flex items-center gap-4">
+      <nav class="flex gap-2">
+        <a 
+          href="/" 
+          class:list={[
+            "px-4 py-2 rounded-md font-medium transition-all hover:bg-accent/10",
+            { "active-nav": pathname === "/" || pathname === "/index.html" }
+          ]}
+        >
+          Home
+        </a>
+        <a 
+          href="/about" 
+          class:list={[
+            "px-4 py-2 rounded-md font-medium transition-all hover:bg-accent/10",
+            { "active-nav": isActive("/about") }
+          ]}
+        >
+          About
+        </a>
+        <a 
+          href="/projects" 
+          class:list={[
+            "px-4 py-2 rounded-md font-medium transition-all hover:bg-accent/10",
+            { "active-nav": isActive("/projects") }
+          ]}
+        >
+          Projects
+        </a>
+        <a 
+          href="/posts" 
+          class:list={[
+            "px-4 py-2 rounded-md font-medium transition-all hover:bg-accent/10",
+            { "active-nav": isActive("/posts") }
+          ]}
+        >
+          Posts
+        </a>
+      </nav>
+      
+      {
+        SITE.lightAndDarkMode && (
+          <button
+            id="theme-btn"
+            class="p-2 rounded-full hover:bg-accent/10 transition-all"
+            title="Toggles light & dark"
+            aria-label="auto"
+            aria-live="polite"
+          >
+            <IconMoon class="w-6 h-6 hidden dark:block" />
+            <IconSunHigh class="w-6 h-6 block dark:hidden" />
+          </button>
+        )
+      }
+    </div>
+  </div>
+</header>
+
+<script>
+  function toggleNav() {
+    const menuBtn = document.querySelector("#menu-btn");
+    const menuItems = document.querySelector("#menu-items");
+    const menuIcon = document.querySelector("#menu-icon");
+    const closeIcon = document.querySelector("#close-icon");
+
+    if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
+
+    menuBtn.addEventListener("click", () => {
+      const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
+
+      menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
+      menuBtn.setAttribute("aria-label", openMenu ? "Open Menu" : "Close Menu");
+
+      menuItems.classList.toggle("hidden");
+      menuIcon.classList.toggle("hidden");
+      closeIcon.classList.toggle("hidden");
+    });
+  }
+
+  toggleNav();
+
+  // Runs on view transitions navigation
+  document.addEventListener("astro:after-swap", toggleNav);
+</script>

@@ -1,0 +1,21 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Socials from "./Socials.astro";
+
+const currentYear = new Date().getFullYear();
+
+type Props = {
+  noMarginTop?: boolean;
+} & HTMLAttributes<"footer">;
+
+const { noMarginTop = false, class: className, ...attrs } = Astro.props;
+---
+
+<footer
+  class:list={["app-layout mt-12 py-6 border-t border-border text-center", className]}
+  {...attrs}
+>
+  <p class="inline-block bg-accent text-white px-6 py-3 rounded-lg text-sm shadow-md">
+    &copy; 2023 - {currentYear} Seniye. All rights reserved.
+  </p>
+</footer>

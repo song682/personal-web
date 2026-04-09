@@ -1,0 +1,75 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Socials from "@/components/Socials.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import IconRss from "@/assets/icons/IconRss.svg";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import { SITE } from "@/config";
+import { SOCIALS } from "@/constants";
+
+const posts = await getCollection("blog");
+
+const sortedPosts = getSortedPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+---
+
+<Layout>
+  <Header />
+  <main id="main-content" data-layout="index" class="app-layout">
+    <!-- Hi Card -->
+    <section class="p-6 rounded-xl bg-[var(--card-bg)] border border-border shadow-sm mb-6 animate-fade-in">
+      <h2 class="text-2xl font-semibold mb-3 border-l-4 border-accent pl-3">Hi!</h2>
+      <p class="text-foreground/80">Welcome to my little corner of the internet!</p>
+    </section>
+
+    <!-- About Me Card -->
+    <section class="p-6 rounded-xl bg-[var(--card-bg)] border border-border shadow-sm mb-6 animate-fade-in-delay-1">
+      <h2 class="text-2xl font-semibold mb-3 border-l-4 border-accent pl-3">Something about me</h2>
+      <p class="text-foreground/80 mb-2">Hello, Seniye's here. You can also call me dfdvdsf or song682. It's up to you.</p>
+      <p class="text-foreground/80 mb-2">I'm a cat lover, a translator enthusiast, and this is my little personal page.</p>
+      <p class="text-foreground/80">
+        More details in the <a href="/about" class="text-accent hover:underline">About</a> section.
+      </p>
+    </section>
+
+    <!-- Recent Posts -->
+    {
+      sortedPosts.length > 0 && (
+        <section class="pt-6">
+          <h2 class="text-2xl font-semibold mb-4 border-l-4 border-accent pl-3">Recent Posts</h2>
+          <ul>
+            {sortedPosts.slice(0, SITE.postPerIndex).map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
+          <div class="mt-6 text-center">
+            <a 
+              href="/posts/" 
+              class="inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-accent text-white hover:bg-accent/90 transition-colors"
+            >
+              All Posts
+              <IconArrowRight class="w-4 h-4" />
+            </a>
+          </div>
+        </section>
+      )
+    }
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
+      ?.dataset?.layout;
+    if (indexLayout) {
+      sessionStorage.setItem("backUrl", "/");
+    }
+  });
+</script>
