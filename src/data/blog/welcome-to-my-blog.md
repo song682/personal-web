@@ -26,8 +26,17 @@ This blog is built with [Astro](https://astro.build/), a fast and modern static 
 
 In this blog, you might find:
 
+DeepSeek，我的这个博客介绍里面我说了一句：
+## What I'll Write About
+
+In this blog, you might find:
+
 - 🎮 **Minecraft Mod Development** - Sharing my mod dev experiences
 - 🐱 **Life Musings** - About cats, coffee, and daily life
+- ❤️‍🩹 **Psyche Things** - About the things I learned as a psychology amateur.
+- 🧐 **Random thinks** - Philosophical ideas, bits of logic, along with some psychology mixed in.
+- 📖 **Book and look** - Sharing books, some notes, thinks.
+- 📒 **Notes from pharmacy** - My majors. Maybe will show somethings that maybe counterintuitive。
 - 🌍 **Translation Works** - Projects I've worked on
 - 💻 **Tech Sharing** - Learning new technologies
 
