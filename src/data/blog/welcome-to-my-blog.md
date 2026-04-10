@@ -26,7 +26,6 @@ This blog is built with [Astro](https://astro.build/), a fast and modern static 
 
 In this blog, you might find:
 
-DeepSeek，我的这个博客介绍里面我说了一句：
 ## What I'll Write About
 
 In this blog, you might find:
