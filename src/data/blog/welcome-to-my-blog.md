@@ -22,9 +22,6 @@ This blog is built with [Astro](https://astro.build/), a fast and modern static 
 - **Developer-friendly** - Supports React, Vue, Svelte, and more
 - **Content-first** - Built-in content collections make blogging easy
 
-## What I'll Write About
-
-In this blog, you might find:
 
 ## What I'll Write About
 
