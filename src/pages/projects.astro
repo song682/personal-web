@@ -4,63 +4,334 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/layouts/Main.astro";
 import { SITE } from "@/config";
+import defaultLogo from "@/assets/logo/default.svg";
+
+interface ProjectLink {
+  href: string;
+  label: string;
+  icon?: "external" | "github";
+}
+
+interface Project {
+  name: string;
+  description: string;
+  tags: string[];
+  links: ProjectLink[];
+  logo?: ImageMetadata;
+  logoSize?: number;
+}
+
+const DEFAULT_LOGO_SIZE = 64;
+
+const projects: Project[] = [
+  {
+    name: "Tippy Mod",
+    description:
+      "A handy Minecraft mod that adds customizable tips functionality to enhance your gameplay experience. With Tippy, you can get detailed information about items, blocks, and entities.",
+    tags: ["Minecraft", "Java", "Forge", "Mixin"],
+    links: [
+      {
+        href: "https://modrinth.com/mod/tippy",
+        label: "Download on Modrinth",
+        icon: "external",
+      },
+      {
+        href: "https://github.com/song682/Tippy",
+        label: "GitHub",
+        icon: "github",
+      },
+    ],
+  },
+];
+
+function getLogoSrc(project: Project) {
+  const img = project.logo ?? defaultLogo;
+  return img.src;
+}
+
+function getLogoSize(project: Project) {
+  return project.logoSize ?? DEFAULT_LOGO_SIZE;
+}
 ---
 
 <Layout title={`Projects | ${SITE.title}`}>
   <Header />
   <Main pageTitle="Projects" pageDesc="Some of my projects and works.">
-    <div class="space-y-8">
-      <!-- Tippy Mod Project -->
-      <article class="border-border border-b pb-8">
-        <h2 class="text-2xl font-semibold mb-2">
-          <a href="https://modrinth.com/mod/tippy" target="_blank" class="hover:text-accent transition-colors">
-            Tippy Mod
-          </a>
-        </h2>
-        <p class="mb-4 text-muted-foreground">
-          A handy Minecraft mod that adds customizable tips functionality to enhance your gameplay experience. 
-          With Tippy, you can get detailed information about items, blocks, and entities.
-        </p>
-        <div class="flex flex-wrap gap-2 mb-4">
-          <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">Minecraft</span>
-          <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">Java</span>
-          <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">Forge</span>
-          <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">Mixin</span>
-        </div>
-        <div class="flex gap-4">
-          <a 
-            href="https://modrinth.com/mod/tippy" 
-            target="_blank"
-            class="inline-flex items-center gap-2 text-accent hover:underline"
-          >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15 3 21 3 21 9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-            Download on Modrinth
-          </a>
-          <a 
-            href="https://github.com/song682/Tippy" 
-            target="_blank"
-            class="inline-flex items-center gap-2 text-accent hover:underline"
-          >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GitHub
-          </a>
-        </div>
-      </article>
+    <!-- View toggle button -->
+    <div class="mb-6 flex justify-end">
+      <button
+        id="view-toggle"
+        class="bg-card-bg hover:bg-border inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors"
+        title="Toggle view mode"
+        aria-label="Toggle between list and card view"
+      >
+        <!-- List icon (shown in card mode → click to switch to list) -->
+        <svg
+          id="toggle-icon-list"
+          class="hidden h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="6" x2="3.01" y2="6" />
+          <line x1="3" y1="12" x2="3.01" y2="12" />
+          <line x1="3" y1="18" x2="3.01" y2="18" />
+        </svg>
+        <!-- Grid icon (shown in list mode → click to switch to card) -->
+        <svg
+          id="toggle-icon-grid"
+          class="hidden h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+        </svg>
+        <span id="toggle-label">List</span>
+      </button>
+    </div>
 
-      <!-- Placeholder for future projects -->
-      <article class="border-border border-b pb-8 opacity-60">
-        <h2 class="text-2xl font-semibold mb-2">More Projects Coming Soon</h2>
+    <!-- ============ LIST VIEW ============ -->
+    <div id="list-view" class="space-y-8">
+      {
+        projects.map((project) => {
+          const size = getLogoSize(project);
+          return (
+            <article class="animate-fade-in flex flex-row items-start gap-6 border-b border-border pb-8">
+              <!-- Content area (left) -->
+              <div class="min-w-0 flex-1">
+                <h2 class="mb-2 text-2xl font-semibold">
+                  <span>{project.name}</span>
+                </h2>
+                <p class="text-muted-foreground mb-4">{project.description}</p>
+                <div class="mb-4 flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <span class="bg-accent/10 text-accent rounded-full px-3 py-1 text-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div class="flex gap-4">
+                  {
+                    project.links.map((link) => (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        class="text-accent inline-flex items-center gap-2 hover:underline"
+                      >
+                        {
+                          link.icon === "github" ? (
+                            <svg
+                              class="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                          ) : (
+                            <svg
+                              class="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                              <polyline points="15 3 21 3 21 9" />
+                              <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>
+                          )
+                        }
+                        {link.label}
+                      </a>
+                    ))
+                  }
+                </div>
+              </div>
+
+              <!-- Logo area (right) -->
+              <div
+                class="flex-shrink-0"
+                style={`width:${size}px;height:${size}px;`}
+              >
+                <img
+                  src={getLogoSrc(project)}
+                  alt={`${project.name} logo`}
+                  class="h-full w-full rounded-xl object-contain"
+                  loading="lazy"
+                />
+              </div>
+            </article>
+          )
+        })
+      }
+
+      <!-- Placeholder for future projects (list view) -->
+      <article class="border-b border-border pb-8 opacity-60">
+        <h2 class="mb-2 text-2xl font-semibold">More Projects Coming Soon</h2>
         <p class="text-muted-foreground">
-          I'm always working on something new. Check back later for more projects!
+          I'm always working on something new. Check back later for more
+          projects!
         </p>
       </article>
+    </div>
+
+    <!-- ============ CARD VIEW ============ -->
+    <div id="card-view" class="hidden">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {
+          projects.map((project) => {
+            const size = getLogoSize(project);
+            return (
+              <article class="animate-fade-in flex flex-col items-center rounded-xl border border-border bg-card-bg p-6 text-center">
+                <!-- Logo (top) -->
+                <div style={`width:${size}px;height:${size}px;`} class="mb-4">
+                  <img
+                    src={getLogoSrc(project)}
+                    alt={`${project.name} logo`}
+                    class="h-full w-full rounded-xl object-contain"
+                    loading="lazy"
+                  />
+                </div>
+
+                <h2 class="mb-2 text-xl font-semibold">{project.name}</h2>
+                <p class="text-muted-foreground mb-4 text-sm">
+                  {project.description}
+                </p>
+
+                <div class="mb-4 flex flex-wrap justify-center gap-2">
+                  {project.tags.map((tag) => (
+                    <span class="bg-accent/10 text-accent rounded-full px-3 py-1 text-xs">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div class="mt-auto flex gap-4">
+                  {
+                    project.links.map((link) => (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        class="text-accent inline-flex items-center gap-1 text-sm hover:underline"
+                      >
+                        {
+                          link.icon === "github" ? (
+                            <svg
+                              class="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                          ) : (
+                            <svg
+                              class="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                              <polyline points="15 3 21 3 21 9" />
+                              <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>
+                          )
+                        }
+                        {link.label}
+                      </a>
+                    ))
+                  }
+                </div>
+              </article>
+            )
+          })
+        }
+
+        <!-- Placeholder card -->
+        <article class="flex flex-col items-center rounded-xl border border-dashed border-border bg-card-bg/50 p-6 text-center opacity-60">
+          <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-xl bg-muted">
+            <svg
+              class="h-8 w-8 text-muted-foreground"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </div>
+          <h2 class="mb-2 text-xl font-semibold">More Projects Coming Soon</h2>
+          <p class="text-muted-foreground text-sm">
+            I'm always working on something new. Check back later for more projects!
+          </p>
+        </article>
+      </div>
     </div>
   </Main>
   <Footer />
 </Layout>
+
+<script>
+  const STORAGE_KEY = "projects-view-mode";
+  const LIST_VIEW_ID = "list-view";
+  const CARD_VIEW_ID = "card-view";
+
+  function getViewMode(): string {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "list" || stored === "card") return stored;
+    return "list"; // default
+  }
+
+  function applyView(mode: string) {
+    const listView = document.getElementById(LIST_VIEW_ID);
+    const cardView = document.getElementById(CARD_VIEW_ID);
+    const toggleIconList = document.getElementById("toggle-icon-list");
+    const toggleIconGrid = document.getElementById("toggle-icon-grid");
+    const toggleLabel = document.getElementById("toggle-label");
+
+    if (!listView || !cardView) return;
+
+    if (mode === "card") {
+      listView.classList.add("hidden");
+      cardView.classList.remove("hidden");
+      toggleIconList?.classList.remove("hidden");
+      toggleIconGrid?.classList.add("hidden");
+      if (toggleLabel) toggleLabel.textContent = "List";
+    } else {
+      listView.classList.remove("hidden");
+      cardView.classList.add("hidden");
+      toggleIconList?.classList.add("hidden");
+      toggleIconGrid?.classList.remove("hidden");
+      if (toggleLabel) toggleLabel.textContent = "Card";
+    }
+  }
+
+  function setupToggle() {
+    const toggleBtn = document.getElementById("view-toggle");
+    if (!toggleBtn) return;
+
+    // Apply initial state
+    const currentMode = getViewMode();
+    applyView(currentMode);
+
+    toggleBtn.addEventListener("click", () => {
+      const newMode = getViewMode() === "list" ? "card" : "list";
+      localStorage.setItem(STORAGE_KEY, newMode);
+      applyView(newMode);
+    });
+  }
+
+  setupToggle();
+
+  // Re-bind after Astro view transitions
+  document.addEventListener("astro:after-swap", setupToggle);
+</script>

@@ -19,23 +19,25 @@ Translation is another passion of mine. Through the conversion of text, I can fe
 
 Besides these, I also love exploring the corners of the city in my spare time, discovering those little hidden beauties unknown to many; I also enjoy trying my hand at making various delicious foods. Although I occasionally fail, the process is always full of fun.
 
-This little website is like a secret base for me, recording some of my thoughts and daily life. I'm glad you found your way here, and I hope you can feel this simple joy too.
+This little website is like a secret base for me, recording some of my thoughts and daily life. I'm glad you found your way here, and I hope you can feel this simple joy too. 
+
+And I some times 
 
 ## My Little World
 
 - ✨ **Favorite Music:** Lite Music, Lofi, Metal, Dubstep, Rap
 - 📚 **Currently Reading:** "Counselling for Toads: A Psychological Adventure"
 - ☕ **Coffee Preference:** Iced Americano, no sugar no milk
+- 
 
 ## Contact Me
 
 - Discord: Seniye
 - Email: [seniye0987@gmail.com](mailto:seniye0987@gmail.com)
 - GitHub: [song682](https://github.com/song682)
-- Instagram: [@sdofndgvdsf682](https://www.instagram.com/sdofndgvdsf682)
 - YouTube: [@pengjiesong-o5z](https://www.youtube.com/@pengjiesong-o5z)
-- X: [@dfdvdsf6822](https://x.com/dfdvdsf6822)
+- X: [@dfdvdsf6821](https://x.com/dfdvdsf6821)
 - Weibo: [7460973171](https://weibo.com/u/7460973171)
-- Bilibili: [562142534](https://space.bilibili.com/562142534)
+- Bilibili: [对方大v的舒服](https://space.bilibili.com/562142534)
 - Twitch: [dfdvdsf](https://www.twitch.tv/dfdvdsf)
 - Spotify: [Open Profile](https://open.spotify.com/user/31axdppje6ocq2exo2hqpw6o5rcu)
