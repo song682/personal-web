@@ -12,6 +12,8 @@ html[data-theme="light"] {
   --muted: #f8fafc;
   --border: #e2e8f0;
   --card-bg: #f8fafc;
+  --card-solid: #e0f1ff;
+  --card-banner: #f8fafc;
 }
 
 html[data-theme="dark"] {
@@ -21,6 +23,8 @@ html[data-theme="dark"] {
   --muted: #252a41;
   --border: #374151;
   --card-bg: #252a41;
+  --card-solid: #18182d;
+  --card-banner: #252a41;
 }
 
 @theme inline {
@@ -31,6 +35,8 @@ html[data-theme="dark"] {
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-card-bg: var(--card-bg);
+  --color-card-solid: var(--card-solid);
+  --color-card-banner: var(--card-banner);
 }
 
 @layer base {

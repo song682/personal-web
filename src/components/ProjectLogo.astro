@@ -1,0 +1,28 @@
+---
+import defaultLogo from "@/assets/logo/default.svg";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  logo?: ImageMetadata;
+  logoSize?: number | [number, number];
+  class?: string;
+}
+
+const { logo, logoSize = 64, class: className } = Astro.props;
+
+const img = logo ?? defaultLogo;
+const w = Array.isArray(logoSize) ? logoSize[0] : logoSize;
+const h = Array.isArray(logoSize) ? logoSize[1] : logoSize;
+---
+
+<div
+  class:list={["flex-shrink-0", className]}
+  style={`width:${w}px;height:${h}px;`}
+>
+  <img
+    src={img.src}
+    alt="Project logo"
+    class="h-full w-full rounded-xl object-contain"
+    loading="lazy"
+  />
+</div>

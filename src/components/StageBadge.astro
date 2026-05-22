@@ -1,0 +1,34 @@
+---
+type Stage = "Pre-Alpha" | "Alpha" | "Beta" | "Release" | "Maintained" | "Archived";
+
+const STAGE_DOT: Record<Stage, string> = {
+  "Pre-Alpha": "#B075FF",
+  Alpha: "#DD4346",
+  Beta: "#E2C626",
+  Release: "#62DD35",
+  Maintained: "#DB9327",
+  Archived: "#4C4C4C",
+};
+
+interface Props {
+  stage: Stage;
+  class?: string;
+}
+
+const { stage, class: className } = Astro.props;
+const dotColor = STAGE_DOT[stage];
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs whitespace-nowrap",
+    className,
+  ]}
+>
+  <span
+    class="inline-block h-1.5 w-1.5 rounded-full"
+    style={`background-color:${dotColor};`}
+  >
+  </span>
+  <span class="text-foreground/70">{stage}</span>
+</span>
