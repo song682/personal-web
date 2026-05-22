@@ -4,6 +4,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/layouts/Main.astro";
 import { SITE } from "@/config";
+import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
 import ProjectLogo from "@/components/ProjectLogo.astro";
 import StageBadge from "@/components/StageBadge.astro";
@@ -46,29 +47,44 @@ function truncateDesc(text: string, maxLen = 60): string {
   return text.slice(0, maxLen).trimEnd() + "...";
 }
 
+/** Parse "64*35"-style string to [w, h]; plain number stays as-is */
+function parseLogoSize(size: number | string | undefined): number | [number, number] | undefined {
+  if (size === undefined) return undefined;
+  if (typeof size === "number") return size;
+  const parts = size.split("*");
+  if (parts.length === 2) return [Number(parts[0]), Number(parts[1])];
+  return Number(size) || undefined;
+}
+
+/** Transform content-collection links (Record<string,string>[]) into ProjectLink[] */
+const LINK_LABELS: Record<string, string> = {
+  curseforge: "CurseForge",
+  modrinth: "Modrinth",
+  source: "Source",
+  link: "Link",
+};
+
+function parseLinks(raw: Record<string, string>[]): ProjectLink[] {
+  return raw.map(item => {
+    const [type, url] = Object.entries(item)[0];
+    return { href: url, label: LINK_LABELS[type] ?? type, type: type as LinkType };
+  });
+}
+
 /* ========== Data ========== */
 
-const projects: Project[] = [
-  {
-    name: "Tippy Mod",
-    description:
-      "A handy Minecraft mod that adds customizable tips functionality to enhance your gameplay experience. With Tippy, you can get detailed information about items, blocks, and entities.",
-    tags: ["Minecraft", "Java", "Forge", "Mixin"],
-    stage: "Archived",
-    links: [
-      {
-        href: "https://modrinth.com/mod/tippy",
-        label: "Modrinth",
-        type: "modrinth",
-      },
-      {
-        href: "https://github.com/song682/Tippy",
-        label: "Source",
-        type: "source",
-      },
-    ],
-  },
-];
+const rawProjects = await getCollection("projects");
+
+const projects: Project[] = rawProjects.map(p => ({
+  name: p.data.title,
+  description: p.data.description,
+  tags: p.data.tags,
+  links: parseLinks(p.data.links),
+  logo: p.data.logo,
+  logoSize: parseLogoSize(p.data["logo-size"]),
+  banner: p.data.banner,
+  stage: p.data.stage,
+}));
 ---
 
 <Layout title={`Projects | ${SITE.title}`}>
@@ -156,7 +172,7 @@ const projects: Project[] = [
 
     <!-- ============ CARD VIEW ============ -->
     <div id="card-view" class="hidden">
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {
           projects.map((project) => {
             const { h: logoH } = getLogoWH(project.logoSize);
