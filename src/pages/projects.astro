@@ -36,13 +36,6 @@ interface Project {
 
 /* ========== Helpers ========== */
 
-const DEFAULT_LOGO_SIZE = 64;
-
-function getLogoWH(size: number | [number, number] = DEFAULT_LOGO_SIZE) {
-  if (Array.isArray(size)) return { w: size[0], h: size[1] };
-  return { w: size, h: size };
-}
-
 function truncateDesc(text: string, maxLen = 60): string {
   if (text.length <= maxLen) return text;
   return text.slice(0, maxLen).trimEnd() + "...";
@@ -178,10 +171,9 @@ const projects: Project[] = rawProjects.map(p => ({
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {
           projects.map((project) => {
-            const { h: logoH } = getLogoWH(project.logoSize);
             const shortDesc = truncateDesc(project.description);
             return (
-              <article class="animate-fade-in relative overflow-hidden rounded-xl border border-border aspect-[5/3]">
+              <article class="animate-fade-in relative overflow-hidden rounded-xl border border-border h-[340px]">
                 {/* Banner: top 1/3 */}
                 <div class="absolute top-0 left-0 right-0 h-1/3 bg-card-banner">
                   {
@@ -204,11 +196,10 @@ const projects: Project[] = rawProjects.map(p => ({
                   style="background: linear-gradient(to bottom, transparent 0%, var(--card-solid) 10%, var(--card-solid) 100%)"
                 >
                   {/* Logo straddles the 1/3 boundary */}
-                  <div style={`margin-top:-${logoH / 2}px;`}>
+                  <div style="transform: translateY(-50%);">
                     <ProjectLogo
                       logo={project.logo}
                       logoSize={project.logoSize}
-                      logoDisplayedSize={project.logoDisplayedSize}
                     />
                   </div>
 
