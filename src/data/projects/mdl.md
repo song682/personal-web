@@ -1,5 +1,5 @@
 ---
-title: Tippy
+title: ModernDifficultyLocker
 tags: 
  - Minecraft
  - Forge 
