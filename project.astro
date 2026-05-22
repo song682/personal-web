@@ -29,12 +29,18 @@ interface Project {
   links: ProjectLink[];
   logo?: ImageMetadata;
   logoSize?: number | [number, number];
-  logoDisplayedSize?: number | [number, number];
   banner?: ImageMetadata;
   stage: Stage;
 }
 
 /* ========== Helpers ========== */
+
+const DEFAULT_LOGO_SIZE = 64;
+
+function getLogoWH(size: number | [number, number] = DEFAULT_LOGO_SIZE) {
+  if (Array.isArray(size)) return { w: size[0], h: size[1] };
+  return { w: size, h: size };
+}
 
 function truncateDesc(text: string, maxLen = 60): string {
   if (text.length <= maxLen) return text;
@@ -76,7 +82,6 @@ const projects: Project[] = rawProjects.map(p => ({
   links: parseLinks(p.data.links),
   logo: p.data.logo,
   logoSize: parseLogoSize(p.data["logo-size"]),
-  logoDisplayedSize: parseLogoSize(p.data["logo-displayed-size"]),
   banner: p.data.banner,
   stage: p.data.stage,
 }));
@@ -149,7 +154,6 @@ const projects: Project[] = rawProjects.map(p => ({
               <ProjectLogo
                 logo={project.logo}
                 logoSize={project.logoSize}
-                logoDisplayedSize={project.logoDisplayedSize}
               />
               <StageBadge stage={project.stage} />
             </div>
@@ -168,14 +172,13 @@ const projects: Project[] = rawProjects.map(p => ({
 
     <!-- ============ CARD VIEW ============ -->
     <div id="card-view" class="hidden">
-      <div class="grid grid-cols-1 gap-[18px] sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {
           projects.map((project) => {
+            const { h: logoH } = getLogoWH(project.logoSize);
             const shortDesc = truncateDesc(project.description);
-            const displaySize = project.logoDisplayedSize ?? project.logoSize ?? 64;
-            const displayH = Array.isArray(displaySize) ? displaySize[1] : displaySize;
             return (
-              <article class="animate-fade-in relative overflow-hidden rounded-xl border border-border aspect-[5/3.2]">
+              <article class="animate-fade-in relative overflow-hidden rounded-xl border border-border aspect-[5/3]">
                 {/* Banner: top 1/3 */}
                 <div class="absolute top-0 left-0 right-0 h-1/3 bg-card-banner">
                   {
@@ -198,11 +201,10 @@ const projects: Project[] = rawProjects.map(p => ({
                   style="background: linear-gradient(to bottom, transparent 0%, var(--card-solid) 10%, var(--card-solid) 100%)"
                 >
                   {/* Logo straddles the 1/3 boundary */}
-                  <div style={`margin-top:-${displayH / 2}px;`}>
+                  <div style={`margin-top:-${logoH / 2}px;`}>
                     <ProjectLogo
                       logo={project.logo}
                       logoSize={project.logoSize}
-                      logoDisplayedSize={project.logoDisplayedSize}
                     />
                   </div>
 
@@ -270,7 +272,7 @@ const projects: Project[] = rawProjects.map(p => ({
   function getViewMode(): string {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === "list" || stored === "card") return stored;
-    return "card";
+    return "list";
   }
 
   function applyView(mode: string) {
