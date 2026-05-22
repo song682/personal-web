@@ -37,6 +37,7 @@ const projects = defineCollection({
         .default([]),
       logo: image().optional(),
       "logo-size": z.union([z.number(), z.string()]).optional(),
+      "logo-displayed-size": z.union([z.number(), z.string()]).optional(),
       banner: image().optional(),
       stage: z.enum([
         "Pre-Alpha",

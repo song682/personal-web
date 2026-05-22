@@ -4,15 +4,19 @@ import type { ImageMetadata } from "astro";
 
 interface Props {
   logo?: ImageMetadata;
+  /** Logical size — used for positioning calculations (e.g. card view margin-top). Defaults to 64. */
   logoSize?: number | [number, number];
+  /** Visual display size — overrides the CSS dimensions shown on screen. Falls back to logoSize if not set. */
+  logoDisplayedSize?: number | [number, number];
   class?: string;
 }
 
-const { logo, logoSize = 64, class: className } = Astro.props;
+const { logo, logoSize = 64, logoDisplayedSize, class: className } = Astro.props;
 
 const img = logo ?? defaultLogo;
-const w = Array.isArray(logoSize) ? logoSize[0] : logoSize;
-const h = Array.isArray(logoSize) ? logoSize[1] : logoSize;
+const displaySize = logoDisplayedSize ?? logoSize;
+const w = Array.isArray(displaySize) ? displaySize[0] : displaySize;
+const h = Array.isArray(displaySize) ? displaySize[1] : displaySize;
 ---
 
 <div

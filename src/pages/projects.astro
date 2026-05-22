@@ -29,6 +29,7 @@ interface Project {
   links: ProjectLink[];
   logo?: ImageMetadata;
   logoSize?: number | [number, number];
+  logoDisplayedSize?: number | [number, number];
   banner?: ImageMetadata;
   stage: Stage;
 }
@@ -82,6 +83,7 @@ const projects: Project[] = rawProjects.map(p => ({
   links: parseLinks(p.data.links),
   logo: p.data.logo,
   logoSize: parseLogoSize(p.data["logo-size"]),
+  logoDisplayedSize: parseLogoSize(p.data["logo-displayed-size"]),
   banner: p.data.banner,
   stage: p.data.stage,
 }));
@@ -154,6 +156,7 @@ const projects: Project[] = rawProjects.map(p => ({
               <ProjectLogo
                 logo={project.logo}
                 logoSize={project.logoSize}
+                logoDisplayedSize={project.logoDisplayedSize}
               />
               <StageBadge stage={project.stage} />
             </div>
@@ -205,6 +208,7 @@ const projects: Project[] = rawProjects.map(p => ({
                     <ProjectLogo
                       logo={project.logo}
                       logoSize={project.logoSize}
+                      logoDisplayedSize={project.logoDisplayedSize}
                     />
                   </div>
 

@@ -11,5 +11,6 @@ links:
  - source: https://github.com/song682/Tippy
 logo: src/assets/logo/tippy.png
 logo-size: 128
+logo-displayed-size: 64
 stage: Archived
 ---
