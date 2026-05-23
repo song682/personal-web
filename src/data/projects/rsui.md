@@ -1,5 +1,5 @@
 ---
-title: ModernResourcePackSelectingUI
+title: ModernPackSelectUI
 tags: 
  - Minecraft
  - Java
