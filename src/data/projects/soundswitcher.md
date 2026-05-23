@@ -11,6 +11,6 @@ links:
  - source: https://github.com/song682/SoundSwitcher
 logo: src/assets/logo/soundswitcher.png
 logo-size: 128
-logo-diplayed-size: 64
+logo-displayed-size: 64
 stage: Archived
 ---
