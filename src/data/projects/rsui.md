@@ -8,6 +8,6 @@ tags:
  - Mixin
 description: Achieve modern feels of resourcepack select UI & UE
 links: 
- - source: https://github.com/song682/ModernResourcePackSelectingUI
+ - source: https://github.com/song682/PackSelectUI
 stage: Beta
 ---
