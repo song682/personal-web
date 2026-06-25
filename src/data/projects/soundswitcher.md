@@ -8,6 +8,7 @@ tags:
  - ASM
 description: A mod to change audio output like 21w37a.
 links: 
+ - modrinth: https://modrinth.com/mod/soundswitcher
  - source: https://github.com/song682/SoundSwitcher
 logo: src/assets/logo/soundswitcher.png
 logo-size: 128

@@ -6,6 +6,7 @@ tags:
  - Mixin
 description: Fix the language reload logic.
 links: 
+ - modrinth: https://modrinth.com/mod/langfixer
  - source: https://github.com/song682/LanguageFixer
 logo: src/assets/logo/LangFixer.png
 logo-size: 128
